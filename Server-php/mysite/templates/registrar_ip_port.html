@@ -1,0 +1,13 @@
+
+<table class="table">
+    <tr>
+        <td> IP </td>
+        <td> PORT </td>
+    </tr>
+    {% for l in tables_nat%}
+    <tr>
+        <td> {{ l.ip }} </td>
+        <td> {{ l.port }} </td>
+    </tr>
+    {% endfor %}
+</table>

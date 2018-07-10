@@ -1,0 +1,1 @@
+curl -d user="luis" -d ip="$1" -d port="$2" -d submit="Register" http://127.0.0.1:8000/ip_port.php
