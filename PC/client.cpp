@@ -58,7 +58,7 @@ int getUsers(std::string user, std::string passwd){
                 char s_user[atoi(size_user)+1];
                 n = read(CServer.socketFD, s_user , atoi(size_user));//User
                 s_user[atoi(size_user)]=0;
-                std::cout << std::string(size_user) << " " << "conectado\n";
+                std::cout << std::string(s_user) << " " << "conectado\n";
                 n = read(CServer.socketFD, size_ip, 2);
                 size_ip[2]=0;
                 char s_ip[atoi(size_user)+1];
@@ -119,9 +119,9 @@ void Se_write(/*int  SocketFD*/) {
                         std::cin >> otherUser;
                         int SocketFD=Users[otherUser].socketFD;
                         std::cout<<"enter message: ";
-                        std::cin.ignore();
-                        getline(std::cin, msg);
-                        //std::cin >> msg;
+                        //std::cin.ignore();
+                        //getline(std::cin, msg);
+                        std::cin >> msg;
                         msg=fillZeros(msg.size(),4)+
                                 "R"+
                                 msg;
@@ -136,7 +136,7 @@ void Se_write(/*int  SocketFD*/) {
 void Se_read(int ConnectFD){
         char buffer[5];
         int n;
-
+        
         for (;;){
                 bzero(buffer, 5);
                 do{
@@ -144,11 +144,11 @@ void Se_read(int ConnectFD){
                         if(n==0){
                                 close(ConnectFD);
                                 return;
-                        }
+                        }       
                         int size_txt=atoi(buffer);
                         bzero(buffer, 4);
                         n = read(ConnectFD, buffer, 1);
-                        std::string action(buffer);
+                        std::string action(buffer); 
                         bzero(buffer, 1);
                         if(action == "L") {
                                 n = read(ConnectFD, buffer, size_txt);

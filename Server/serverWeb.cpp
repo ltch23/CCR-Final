@@ -84,21 +84,33 @@ void read2(int ConnectFD){
 				char m_Passw[atoi(size_passw)+1];
 				n = read(ConnectFD, m_Passw, atoi(size_passw));//Passw
 				m_Passw[atoi(size_passw)]=0;
-				clients[std::string(m_User)]=make_pair(std::string(m_Passw),-1);
-				std::vector<std::string> usersList;
-				for (it2 = clients.begin(); it2 != clients.end(); it2++)
-					if((it2->second).second != -1){
-						usersList.push_back(it2->first);
+				if(clients.find(std::string(m_User))!=clients.end() && clients[std::string(m_User)].first==std::string(m_Passw)) {
+					clients[std::string(m_User)]=std::make_pair(std::string(m_Passw),ConnectFD);
+					std::cout << std::string(m_User) << " " << std::string(m_Passw) << "\n";
+					std::vector<std::string> usersList;
+					for (auto ite = clients.begin(); ite != clients.end(); ite++){
+						std::cout << "usuario: " << ite->first << "\n";
+						if((ite->second).second != -1 && (ite->second).second != ConnectFD){
+							if(Table.find(clients[ite->first].second)!=Table.end()){
+								usersList.push_back(ite->first);
+								std::cout << "conectado\n";
+							}
+						}
 					}
-				std::string usersProtocol=fillZeros(usersList.size(),4);
-				for (int i=0;i<usersList.size();i++){
-					usersProtocol+=fillZeros(usersList[i].size(),2);
-					usersProtocol+=fillZeros(Table[clients[usersList[i]].second].first.size(),2);
-					usersProtocol+=Table[clients[usersList[i]].second].first;
-					usersProtocol+=fillZeros(Table[clients[usersList[i]].second].second.size(),2);
-					usersProtocol+=Table[clients[usersList[i]].second].second;
+					std::string usersProtocol=fillZeros(usersList.size(),4);
+					for (int i=0;i<usersList.size();i++){
+						usersProtocol+=fillZeros(usersList[i].size(),2);
+						usersProtocol+=usersList[i];
+						usersProtocol+=fillZeros(Table[clients[usersList[i]].second].first.size(),2);
+						usersProtocol+=Table[clients[usersList[i]].second].first;
+						usersProtocol+=fillZeros(Table[clients[usersList[i]].second].second.size(),2);
+						usersProtocol+=Table[clients[usersList[i]].second].second;
+					}
+					write(ConnectFD,usersProtocol.c_str(),usersProtocol.size());
+					std::cout << usersProtocol << std::endl;
+				} else {
+					write(ConnectFD,"0000",4);
 				}
-				write(ConnectFD,usersProtocol.c_str(),usersProtocol.size());
 			} else if (action == "F") {//Protocolo for Insert Row
 				char m_routerIp[size_txt+1];
 				n = read(ConnectFD, m_routerIp, size_txt);//routerIp
