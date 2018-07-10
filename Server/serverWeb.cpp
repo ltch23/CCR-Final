@@ -182,10 +182,24 @@ int main(void){
 	for (int i=1100;startConnection(i)==false;i++){
 		std::cout << "Port " << i << ": " << "bind or listen error" << std::endl;
 	}
-	for (int i=0;i<5;i++){
-		clients["PC"+std::to_string(i)]=std::make_pair("pass",-1);
+	std::cout << "¿preasignar contraseñas?(yes/no)" << std::endl;
+	std::string preAsig;
+	std::cin >> preAsig;
+	if(preAsig=="yes"){
+		std::cout << "Numero de Usuarios"<< std::endl;
+		int n;
+		std::cin >> n;
+		for (int i=0;i<n;i++){
+			std::cout << "Usuario contraseña"<< std::endl;
+			std::string useraux, passaux;
+			std::cin >> useraux >> passaux;
+			clients[useraux]=std::make_pair(passaux,-1);
+		}
+	} else {
+		for (int i=0;i<5;i++){
+			clients["PC"+std::to_string(i)]=std::make_pair("pass",-1);
+		}
 	}
-	
 	while(true){
 		int ConnectFD = accept(SocketFD, NULL, NULL);
 		std::cout << "ConnectFD: " << ConnectFD << std::endl;
