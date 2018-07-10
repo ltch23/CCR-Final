@@ -1,0 +1,21 @@
+#!/bin/bash                                                                               
+# RESTART FIREWALL
+# put this file in /root/fw.restart
+# and allow permissions
+                                                                                          
+echo "Stopping firewall and allowing everyone..."                                         
+iptables -F                                                                               
+iptables -X                                                                               
+iptables -t nat -F                                                                        
+iptables -t nat -X                                                                        
+iptables -t mangle -F                                                                     
+iptables -t mangle -X                                                                     
+iptables -P INPUT ACCEPT                                                                  
+iptables -P FORWARD ACCEPT                                                                
+iptables -P OUTPUT ACCEPT                                                                 
+iptables -t nat -A POSTROUTING -o enp0s3 -j SNAT --to-source 172.20.10.3                  
+echo "Starting firewall and allowing port forwarding..."                                  
+iptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to-destination 10.10.10.2:80    
+iptables -t nat -A PREROUTING -p tcp --dport 1202 -j DNAT --to-destination 10.10.10.2:1200
+iptables -A FORWARD -p tcp -d 10.10.10.2 --dport 1200 -j ACCEPT                           
+su -c 'iptables-save > /etc/iptables.rules'                                               
