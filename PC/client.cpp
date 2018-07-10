@@ -152,7 +152,10 @@ void openPortNat(int routerPort, int pcPort){
         system(std::string("/home/paralelos/CCR/nat.sh "+std::to_string(routerPort)+ " " + std::to_string(pcPort)).c_str());
         //m_User="pc1";
         m_routerPort=std::to_string(routerPort);
-        m_routerIp="172.20.10.2";
+        system("/home/paralelos/CCR/gateway.sh");
+        std::ifstream publicIp;
+        publicIp.open("gateway.txt");
+        getline(publicIp, m_routerIp);
 }
 
 int ConnectAndGetPort(/*std::string user, std::string passwd*/){
