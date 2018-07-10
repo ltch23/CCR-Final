@@ -205,15 +205,12 @@ void openPortNat(int routerPort, int pcPort){
         std::ifstream publicIp;
         publicIp.open("gateway.txt");
         getline(publicIp, m_routerIp);
-<<<<<<< HEAD
         std::string msg=fillZeros(m_routerIp.size(),4)+
                         "F"+
                         m_routerIp+
                         fillZeros(m_routerPort.size(),2)+
                         m_routerPort;
         write(CServer.socketFD, msg.c_str(), msg.size());
-=======
->>>>>>> 000c051018595579ca88af25f99db3cd475af7e4
 }
 
 /*Conecta Servidor y devuelve puerto de nat*/
