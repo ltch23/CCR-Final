@@ -1,0 +1,16 @@
+#!/etc/network/interface
+auto lo                                              
+iface lo inet loopback                               
+                                                     
+auto enp0s3                                          
+iface enp0s3 inet static                             
+        address 172.20.10.3                          
+        netmask 255.255.255.240                      
+        gateway 172.20.10.1                          
+        dns-nameservers 172.20.10.1                  
+        pre-up iptables-restore < /etc/iptables.rules
+                                                     
+auto enp0s8                                          
+iface enp0s8 inet static                             
+        address 10.10.10.1                           
+        netmask 255.255.0.0                          
